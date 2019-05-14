@@ -12,12 +12,15 @@ from eth_keyfile import create_keyfile_json
 from eth_utils import to_checksum_address
 
 
-def make_keystore(output_path: str):
-    password = click.prompt(
-        'Enter new password for keyfile',
-        hide_input=True,
-        confirmation_prompt=True,
-    ).encode()
+def make_keystore(output_path: str, password: str):
+    if not password:
+        password = click.prompt(
+            'Enter new password for keyfile',
+            hide_input=True,
+            confirmation_prompt=True,
+        ).encode()
+    else:
+        password = password.encode()
     now = datetime.utcnow().replace(microsecond=0)
     target_path = Path(output_path)
     target_path.mkdir(parents=True, exist_ok=True)
@@ -35,15 +38,18 @@ def fetch_eth(faucet_base_url, address):
 
 @click.command()
 @click.option(
+    '-p', '--password'
+)
+@click.option(
     '-o', '--output-path',
     type=click.Path(file_okay=False, dir_okay=True),
     default=Path('keystore'),
     show_default=True,
 )
 @click.option('--faucet-url', default='https://faucet.workshop.raiden.network')
-def main(output_path, faucet_url):
+def main(output_path, faucet_url, password):
     click.secho('Generating keyfile', fg='yellow')
-    keyfile_file_path, address = make_keystore(output_path)
+    keyfile_file_path, address = make_keystore(output_path, password)
     click.echo(
         click.style('Wrote keyfile to ', fg='blue') +
         click.style(keyfile_file_path, fg='green')
@@ -52,7 +58,7 @@ def main(output_path, faucet_url):
         click.style('Address: ', fg='blue') +
         click.style(to_checksum_address(address), fg='green')
     )
-    click.secho('Fetching Kovan Eth and Workshop tokens from faucet', fg='yellow')
+    click.secho('Fetching Görli Eth and Workshop tokens from faucet', fg='yellow')
     success, response = fetch_eth(faucet_url, address)
     if success:
         click.secho('Succesfully funded address', fg='green')
