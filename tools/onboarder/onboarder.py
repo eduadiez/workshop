@@ -27,6 +27,8 @@ def make_keystore(output_path: str, password: str):
     keyfile_content = create_keyfile_json(os.urandom(32), password)
     keyfile_file = target_path.joinpath(to_checksum_address(keyfile_content['address']))
     keyfile_file.write_text(json.dumps(keyfile_content))
+    keyfile_file_password = target_path.joinpath('.password_' + to_checksum_address(keyfile_content['address']))
+    keyfile_file_password.write_text(password)
     return str(keyfile_file), keyfile_content['address']
 
 
