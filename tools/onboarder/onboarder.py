@@ -24,8 +24,8 @@ def make_keystore(output_path: str, password: str):
     now = datetime.utcnow().replace(microsecond=0)
     target_path = Path(output_path)
     target_path.mkdir(parents=True, exist_ok=True)
-    keyfile_file = target_path.joinpath(f'UTC--{now.isoformat().replace(":", "-")}Z--{uuid4()!s}')
     keyfile_content = create_keyfile_json(os.urandom(32), password)
+    keyfile_file = target_path.joinpath(keyfile_content['address'])
     keyfile_file.write_text(json.dumps(keyfile_content))
     return str(keyfile_file), keyfile_content['address']
 
