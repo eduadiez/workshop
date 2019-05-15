@@ -4,11 +4,11 @@ block_cipher = None
 
 
 a = Analysis(['to_checksum_address.py'],
-             pathex=['/workshop/onboarder'],
+             pathex=['to_checksum_address'],
              binaries=[],
              datas=[],
              hiddenimports=[],
-             hookspath=[],
+             hookspath=['hooks'],
              runtime_hooks=[],
              excludes=[],
              win_no_prefer_redirects=False,
