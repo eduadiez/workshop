@@ -48,7 +48,7 @@ def fetch_eth(faucet_base_url, address):
     default=Path('keystore'),
     show_default=True,
 )
-@click.option('--faucet-url', default='https://faucet.workshop.raiden.network')
+@click.option('--faucet-url', default='https://dappnode-faucet.raiden.network')
 def main(output_path, faucet_url, password):
     click.secho('Generating keyfile', fg='yellow')
     keyfile_file_path, address = make_keystore(output_path, password)
